@@ -15,7 +15,7 @@ export default function DoctorDashboard() {
   // Inside your component
   const fetchAppointments = useCallback(async () => {
     try {
-      const { data } = await api.get("/appointment/doctor/676b3cbbcd54e24bbff1f564");
+      const { data } = await api.get("/appointment/doctor/6772a794ea5756025c76d6fd");
       setAppointments(data.appointments);
       if (filterType === "upcoming") {
         setFilteredAppointments(data.appointments.filter((a: Appointment) => new Date(a.date) >= new Date()));
