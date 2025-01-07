@@ -105,6 +105,12 @@ export default function PatientDashboard() {
       icon: <XCircle className="h-4 w-4 text-muted-foreground" />,
       filterType: "missed"
     },
+    {
+      title: "Rescheduled",
+      value: appointments.filter((a) => a.status === "rescheduled").length,
+      icon: <XCircle className="h-4 w-4 text-muted-foreground" />,
+      filterType: "rescheduled"
+    },
   ];
 
   const recentAppointments = filterAndSortAppointments(appointments);

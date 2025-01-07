@@ -90,6 +90,16 @@ export default function DoctorDashboard() {
           <span className="mt-2 text-sm font-semibold">Pending</span>
           <span className="text-lg">{appointments.filter(a => a.status === "pending").length}</span> </button>
 
+
+          <button
+          onClick={() => handleFilterChange("confirmed")}
+          className={`flex flex-col items-center p-4 border rounded-md ${filterType === "confirmed" ? 'bg-blue-200' : 'hover:bg-blue-400'}`}
+        >
+          <Clock className="h-4 w-4 text-muted-foreground" />
+          <span className="mt-2 text-sm font-semibold">Confirmed</span>
+          <span className="text-lg">{appointments.filter(a => a.status === "confirmed").length}</span> </button>
+
+
         <button
           onClick={() => handleFilterChange("completed")}
           className={`flex flex-col items-center p-4 border rounded-md ${filterType === "completed" ? 'bg-blue-200' : 'hover:bg-blue-400'}`}
@@ -97,6 +107,15 @@ export default function DoctorDashboard() {
           <CheckCircle className="h-4 w-4 text-muted-foreground" />
           <span className="mt-2 text-sm font-semibold">Completed</span>
           <span className="text-lg">{appointments.filter(a => a.status === "completed").length}</span>
+        </button>
+
+        <button
+          onClick={() => handleFilterChange("ongoing")}
+          className={`flex flex-col items-center p-4 border rounded-md ${filterType === "ongoing" ? 'bg-blue-200' : 'hover:bg-blue-400'}`}
+        >
+          <Clock className="h-4 w-4 text-muted-foreground" />
+          <span className="mt-2 text-sm font-semibold">Ongoing</span>
+          <span className="text-lg">{appointments.filter(a => a.status === "ongoing").length}</span>
         </button>
 
         <button
@@ -116,6 +135,17 @@ export default function DoctorDashboard() {
           <span className="mt-2 text-sm font-semibold">Missed</span>
           <span className="text-lg">{appointments.filter(a => a.status === "missed").length}</span>
         </button>
+
+
+        <button
+          onClick={() => handleFilterChange("rescheduled")}
+          className={`flex flex-col items-center p-4 border rounded-md ${filterType === "rescheduled" ? 'bg-blue-200' : 'hover:bg-blue-400'}`}
+        >
+          <XCircle className="h-4 w-4 text-muted-foreground" />
+          <span className="mt-2 text-sm font-semibold">Rescheduled Request</span>
+          <span className="text-lg">{appointments.filter(a => a.status === "rescheduled").length}</span>
+        </button>
+
       </div>
 
       <button

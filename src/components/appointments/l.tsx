@@ -7,6 +7,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+//   DialogDescription
+// } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, User, CheckCircle, XCircle } from "lucide-react";
 import { format } from "date-fns";
@@ -14,8 +22,6 @@ import { Appointment } from "@/types";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import api from "@/lib/axios";
-import "./AppointmentPopup.css";
-
 
 interface AppointmentListProps {
   appointments: Appointment[];
@@ -23,19 +29,12 @@ interface AppointmentListProps {
   onStatusChange?: () => void;
 }
 
-export function AppointmentList({
-  appointments,
-  type,
-  onStatusChange,
-}: AppointmentListProps) {
+
+export function AppointmentList({ appointments, type, onStatusChange }: AppointmentListProps) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [doctorNames, setDoctorNames] = useState<Record<string, string>>({});
   const [patientNames, setPatientNames] = useState<Record<string, string>>({});
-  const [confirmation, setConfirmation] = useState<{
-    show: boolean;
-    appointmentId: string | null;
-  }>({ show: false, appointmentId: null });
 
   useEffect(() => {
     const fetchNames = async () => {
@@ -103,10 +102,8 @@ export function AppointmentList({
     }
   }, [appointments]);
 
-  const handleStatusChange = async (
-    _id: string,
-    status: Appointment["status"]
-  ) => {
+
+  const handleStatusChange = async (_id: string, status: Appointment["status"]) => {
     try {
       setLoading(true);
       await api.patch(`/appointment/doctor/status/${_id}`, { status });
@@ -120,7 +117,6 @@ export function AppointmentList({
     }
   };
 
-
   const getStatusColor = (status: Appointment["status"]) => {
     switch (status) {
       case "confirmed":
@@ -133,8 +129,6 @@ export function AppointmentList({
         return "bg-red-500";
       case "rescheduled":
         return "bg-blue-500"
-      case "ongoing":
-        return "bg-yellow-500"
       default:
         return "bg-gray-500";
     }
@@ -154,21 +148,6 @@ export function AppointmentList({
     return name || "Loading...";
   };
 
-  // confirmation modal
-  const showConfirmation = (appointmentId: string) => {
-    setConfirmation({ show: true, appointmentId });
-  };
-
-  const hideConfirmation = () => {
-    setConfirmation({ show: false, appointmentId: null });
-  };
-
-  const confirmCancellation = () => {
-    if (confirmation.appointmentId) {
-      handleStatusChange(confirmation.appointmentId, "cancelled");
-    }
-    hideConfirmation();
-  };
 
   return (
     <div className="space-y-4">
@@ -193,8 +172,6 @@ export function AppointmentList({
                 </Badge>
               </CardHeader>
               <CardContent>
-
-
                 <div className="grid gap-2">
                   <div className="flex items-center text-sm">
                     <Calendar className="mr-2 h-4 w-4" />
@@ -211,7 +188,6 @@ export function AppointmentList({
                       : getName(appointment.patient._id, "patient")}
                   </div>
                 </div>
-
 
                 {type === "doctor" && appointment.status === "pending" && (
                   <div className="mt-4 flex space-x-2">
@@ -235,6 +211,20 @@ export function AppointmentList({
                   </div>
                 )}
 
+                {/* patient pending -> cancel */}
+                {type === "patient" && appointment.status === "pending" && (
+                  <div className="mt-4 flex space-x-2">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleStatusChange(appointment._id, "cancelled")}
+                      disabled={loading}
+                    >
+                    Cancel
+                    </Button>
+                  </div>
+                )}
+
                 {type === "patient" && appointment.status === "missed" && (
                   <div className="mt-4 flex space-x-2">
                     <Button
@@ -244,6 +234,20 @@ export function AppointmentList({
                       disabled={loading}
                     >
                       Reschedule
+                    </Button>
+                  </div>
+                )}
+
+
+                {type === "patient" && appointment.status === "rescheduled" && (
+                  <div className="mt-4 flex space-x-2">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleStatusChange(appointment._id, "cancelled")}
+                      disabled={loading}
+                    >
+                    Cancel
                     </Button>
                   </div>
                 )}
@@ -280,27 +284,10 @@ export function AppointmentList({
                       variant="destructive"
                       size="sm"
                       className="flex items-center"
-                      onClick={() => showConfirmation(appointment._id)}
+                      onClick={() => handleStatusChange(appointment._id, "cancelled")}
                       disabled={loading}
                     >
                       <XCircle className="mr-2 h-4 w-4" /> Cancel
-                    </Button>
-                  </div>
-                )}
-
-
-                {/* ongoing to complete */}
-                {type === "doctor" && appointment.status === "ongoing" && (
-                  <div className="mt-4 flex items-center">
-                    {/* Mark as Completed */}
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="bg-green-700 hover:bg-green-900 text-white flex items-center"
-                      onClick={() => handleStatusChange(appointment._id, "completed")}
-                      disabled={loading}
-                    >
-                      <CheckCircle className="mr-2 h-4 w-4" /> Mark as Completed
                     </Button>
                   </div>
                 )}
@@ -321,7 +308,7 @@ export function AppointmentList({
                       variant="destructive"
                       size="sm"
                       style={{ height: '33px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      onClick={() => showConfirmation(appointment._id)}
+                      onClick={() => handleStatusChange(appointment._id, "cancelled")}
                       disabled={loading}
                     >
                       <XCircle className="mr-2 h-4 w-4" /> Cancel
@@ -330,67 +317,11 @@ export function AppointmentList({
                 )}
 
 
-                {/* patient and rescheduled */}
-                {type === "patient" && appointment.status === "rescheduled" && (
-                  <div className="mt-4 flex space-x-2">
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => showConfirmation(appointment._id)}
-                      disabled={loading}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                )}
-
-
-                {type === "patient" && appointment.status === "pending" && (
-                  <div className="mt-4 flex space-x-2">
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => showConfirmation(appointment._id)}
-                      disabled={loading}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </motion.div>
         ))}
       </AnimatePresence>
-
-      {confirmation.show && (
-        <div className="popup-overlay">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="popup-box"
-          >
-            <div className="popup-logo"></div>
-            <h3 className="popup-title">Confirm Cancellation</h3>
-            <p className="popup-text">
-              Are you sure you want to cancel this appointment? This action cannot be undone.
-            </p>
-            <div className="popup-buttons">
-              <button className="button button-default" onClick={hideConfirmation}>
-                Undo
-              </button>
-              <button
-                className="button button-destructive"
-                onClick={confirmCancellation}
-                disabled={loading}
-              >
-                Confirm
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </div>
   );
 }

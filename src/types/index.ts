@@ -25,6 +25,6 @@ export interface Appointment {
   date: string;
   time: string;
   duration: number;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'missed' | 'ongoing';
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'missed' | 'ongoing' | 'rescheduled';
   reason: string;
 }

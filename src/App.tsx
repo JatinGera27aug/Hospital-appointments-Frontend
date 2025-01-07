@@ -7,6 +7,7 @@ import PatientDashboard from '@/pages/PatientDashboard';
 import DoctorDashboard from '@/pages/DoctorDashboard';
 import AdminDashboard from '@/pages/AdminDashboard';
 import BookAppointment from '@/pages/BookAppointment';
+import RescheduleAppointment from '@/pages/ReschedulingAppointment';
 import Register from '@/pages/Register';
 import Login from '@/pages/Login';
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/patient/book-appointment" element={<BookAppointment />} />
             <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/patient/reschedule-appointment/:appointmentId" element={<RescheduleAppointment />} />
           </Routes>
           <Toaster />
         </div>

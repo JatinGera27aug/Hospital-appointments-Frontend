@@ -1,0 +1,72 @@
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+    backdrop-filter: blur(8px); /* Blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .popup-box {
+    background: linear-gradient(to bottom, #797272, #778f9a); /* Light gradient */
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  
+  .popup-logo {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 16px;
+    background: url('../../../public/icons8-hospital-50.svg') no-repeat center;
+    background-size: contain;
+  }
+  
+  .popup-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #11171d; /* Hospital Blue */
+    margin-bottom: 12px;
+  }
+  
+  .popup-text {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: #333;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .button-default {
+    background-color: #6b7b92;
+    color: white;
+  }
+  
+  .button-destructive {
+    background-color: #ba434f;
+    color: white;
+  }
+  
+  .button:hover {
+    transform: scale(1.1);
+  }
+  
