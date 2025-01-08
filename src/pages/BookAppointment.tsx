@@ -35,13 +35,13 @@ export default function BookAppointment() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl mx-auto"
+        className="max-w-3xl mx-auto"
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>Book an Appointment</CardTitle>
+        <Card className="border-0 bg-transparent shadow-none">
+          <CardHeader className="p-0">
+            <CardTitle></CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {loading ? (
               <p>Loading doctors...</p>
             ) : (

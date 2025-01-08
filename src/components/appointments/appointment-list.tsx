@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import api from "@/lib/axios";
 import "./AppointmentPopup.css";
 
-
 interface AppointmentListProps {
   appointments: Appointment[];
   type: "patient" | "doctor";
@@ -36,6 +35,8 @@ export function AppointmentList({
     show: boolean;
     appointmentId: string | null;
   }>({ show: false, appointmentId: null });
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
   useEffect(() => {
     const fetchNames = async () => {
@@ -132,7 +133,7 @@ export function AppointmentList({
       case "cancelled":
         return "bg-red-500";
       case "rescheduled":
-        return "bg-blue-500"
+        return "bg-blue-400"
       case "ongoing":
         return "bg-yellow-500"
       default:
@@ -168,6 +169,16 @@ export function AppointmentList({
       handleStatusChange(confirmation.appointmentId, "cancelled");
     }
     hideConfirmation();
+  };
+
+  const handleViewDetails = (appointment: Appointment) => {
+    setSelectedAppointment(appointment);
+    setShowDetails(true);
+  };
+
+  const handleCloseDetails = () => {
+    setShowDetails(false);
+    setSelectedAppointment(null);
   };
 
   return (
@@ -227,7 +238,7 @@ export function AppointmentList({
                       variant="destructive"
                       size="sm"
                       style={{ height: '33px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      onClick={() => handleStatusChange(appointment._id, "cancelled")}
+                      onClick={() => showConfirmation(appointment._id)}
                       disabled={loading}
                     >
                       <XCircle className="mr-2 h-4 w-4" />Cancel
@@ -357,6 +368,21 @@ export function AppointmentList({
                     </Button>
                   </div>
                 )}
+
+                {type === "doctor" && (
+                  <div className="mt-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleViewDetails(appointment)}
+                      className="text-white-500 hover:text-white-200"
+                    >
+                      View Details
+                    </Button>
+                  </div>
+                )}
+
+
               </CardContent>
             </Card>
           </motion.div>
@@ -387,6 +413,36 @@ export function AppointmentList({
               >
                 Confirm
               </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Details Modal */}
+      {showDetails && selectedAppointment && (
+        <div className="popup-overlay">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="popup-box"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Appointment Detail</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCloseDetails}
+                className="h-6 w-6 p-0"
+              >
+                <XCircle className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <h4 className="text-md font-bold text-black">Reason for Visit</h4>
+                <p className="mt-1 mr-1 font-semibold justify-items align-center text-blue-800">💊 {selectedAppointment.reason || 'N/A'}</p>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Calendar, Clock, CheckCircle, XCircle, CalendarCheck } from "lucide-react";
 // import { StatsCard } from "@/components/dashboard/stats-card";
 import { AppointmentList } from "@/components/appointments/appointment-list";
 import { Button } from "@/components/ui/button";
@@ -108,7 +108,7 @@ export default function PatientDashboard() {
     {
       title: "Rescheduled",
       value: appointments.filter((a) => a.status === "rescheduled").length,
-      icon: <XCircle className="h-4 w-4 text-muted-foreground" />,
+      icon: <CalendarCheck className="h-4 w-4 text-muted-foreground" />,
       filterType: "rescheduled"
     },
   ];

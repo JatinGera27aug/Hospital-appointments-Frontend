@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Calendar, Clock, CheckCircle, XCircle, CalendarCheck } from "lucide-react";
 import { AppointmentList } from "@/components/appointments/appointment-list";
 import { Appointment } from "@/types";
 import api from "@/lib/axios";
@@ -141,7 +141,7 @@ export default function DoctorDashboard() {
           onClick={() => handleFilterChange("rescheduled")}
           className={`flex flex-col items-center p-4 border rounded-md ${filterType === "rescheduled" ? 'bg-blue-200' : 'hover:bg-blue-400'}`}
         >
-          <XCircle className="h-4 w-4 text-muted-foreground" />
+          <CalendarCheck className="h-4 w-4 text-muted-foreground" />
           <span className="mt-2 text-sm font-semibold">Rescheduled Request</span>
           <span className="text-lg">{appointments.filter(a => a.status === "rescheduled").length}</span>
         </button>
